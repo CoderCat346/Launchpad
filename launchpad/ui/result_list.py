@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from PySide6.QtGui import QIcon, QListWidgetItem
-from PySide6.QtGui import QIcon, QListWidgetItem
-from PySide6.QtWidgets import QListWidget, QListWidgetItem as _QListWidgetItem
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QListWidget, QListWidgetItem
 
 
 @dataclass
@@ -43,7 +43,7 @@ class ResultList(QListWidget):
         self.clear()
         self._rows = list(rows)
         for r in self._rows:
-            item = _QListWidgetItem(r.text)
+            item = QListWidgetItem(r.text)
             if r.sub:
                 item.setToolTip(r.sub)
             if r.icon is not None:

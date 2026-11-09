@@ -5,7 +5,7 @@ import ctypes.wintypes as wintypes
 from pathlib import Path
 from typing import Optional
 
-from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtGui import QIcon, QImage, QPixmap
 
 
 shell32 = ctypes.windll.shell32  # type: ignore[attr-defined]
@@ -54,9 +54,9 @@ def shell_icon(path: Optional[Path], small: bool = True) -> Optional[QIcon]:
     if not ret or not info.hIcon:
         return None
     try:
-        pixmap = QPixmap.fromWinHICON(info.hIcon)
-        if pixmap.isNull():
+        image = QImage.fromHICON(info.hIcon)
+        if image.isNull():
             return None
-        return QIcon(pixmap)
+        return QIcon(QPixmap.fromImage(image))
     finally:
         user32.DestroyIcon(info.hIcon)

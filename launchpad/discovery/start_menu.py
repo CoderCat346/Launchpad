@@ -24,7 +24,7 @@ class AppEntry:
 
     def result_key(self) -> str:
         # Dedupe key: target + arguments (case‑insensitive).
-        return f"{self.resolved.target.resolve().casefold()}|{self.resolved.arguments.casefold()}"
+        return f"{str(self.resolved.target.resolve()).casefold()}|{self.resolved.arguments.casefold()}"
 
     def to_result(self) -> ResultItem:
         return ResultItem(
@@ -83,7 +83,7 @@ def discover_start_menu_entries(
             if not resolved.target.exists():
                 # Broken shortcut (target missing). Skip.
                 continue
-            key = f"{resolved.target.resolve().casefold()}|{resolved.arguments.casefold()}"
+            key = f"{str(resolved.target.resolve()).casefold()}|{resolved.arguments.casefold()}"
             if key in seen:
                 continue
             seen.add(key)

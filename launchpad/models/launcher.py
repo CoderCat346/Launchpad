@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import shlex
 from pathlib import Path
 from typing import Optional
 
@@ -57,10 +56,35 @@ def _split_args(args: str) -> list[str]:
     args = (args or "").strip()
     if not args:
         return []
-    try:
-        return shlex.split(args, posix=False)
-    except ValueError:
+
+    # A small quote-aware splitter for Windows-style argument strings.
+    # Unlike `shlex.split(..., posix=True)` it preserves backslashes in
+    # paths, and unlike `posix=False` it strips the surrounding quotes.
+    tokens: list[str] = []
+    current: list[str] = []
+    quote: str | None = None
+
+    for ch in args:
+        if quote is not None:
+            if ch == quote:
+                quote = None
+            else:
+                current.append(ch)
+        elif ch in ("'", '"'):
+            quote = ch
+        elif ch.isspace():
+            if current:
+                tokens.append("".join(current))
+                current = []
+        else:
+            current.append(ch)
+
+    if quote is not None:
+        # Unbalanced quote: keep the original string as a single argument.
         return [args]
+    if current:
+        tokens.append("".join(current))
+    return tokens
 
 
 def _read_url_file(path: Path) -> Optional[str]:

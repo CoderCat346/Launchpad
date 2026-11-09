@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QKeyEvent
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QWidget
+from PySide6.QtCore import QEvent, Qt, Signal
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QVBoxLayout, QWidget
 
 
 class SearchBar(QWidget):
@@ -48,13 +47,6 @@ class SearchBar(QWidget):
         bottom.addStretch(1)
         bottom.addWidget(self._hint)
 
-        outer = QHBoxLayout(self)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.setSpacing(0)
-        # Re-layout: we need a vertical stack. Replace the QHBoxLayout we
-        # just made with a QVBoxLayout at the outer level.
-        self.layout().deleteLater()
-        from PySide6.QtWidgets import QVBoxLayout
         v = QVBoxLayout(self)
         v.setContentsMargins(0, 0, 0, 0)
         v.setSpacing(0)
@@ -80,7 +72,7 @@ class SearchBar(QWidget):
     # --- key handling -------------------------------------------------
 
     def eventFilter(self, obj, event):  # noqa: ANN001 - Qt event types
-        if obj is self._edit and event.type() == event.KeyPress:
+        if obj is self._edit and event.type() == QEvent.Type.KeyPress:
             key = event.key()
             modifiers = event.modifiers()
             if key == Qt.Key_Up:

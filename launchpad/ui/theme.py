@@ -42,7 +42,10 @@ def apply_theme(app: QApplication) -> None:
     pal.setColor(QPalette.PlaceholderText, QColor(p["fg_muted"]))
     app.setPalette(pal)
 
-    app.setStyleSheet(_STYLESHEET.format(**p))
+    sheet = _STYLESHEET
+    for key, value in p.items():
+        sheet = sheet.replace("{" + key + "}", value)
+    app.setStyleSheet(sheet)
 
 
 _STYLESHEET = """
@@ -61,8 +64,8 @@ QLineEdit#search {
     font-size: 18px;
     padding: 10px 8px;
 }
-QLineEdit#search:focus {{ border: none; }}
-QLabel#modePill {{
+QLineEdit#search:focus { border: none; }
+QLabel#modePill {
     background: {bg};
     color: {fg_muted};
     border: 1px solid {border};
@@ -71,26 +74,26 @@ QLabel#modePill {{
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.5px;
-}}
-QLabel#hint {{
+}
+QLabel#hint {
     color: {fg_muted};
     font-size: 11px;
-}}
-QListWidget#results {{
+}
+QListWidget#results {
     background: transparent;
     border: none;
     outline: none;
     color: {fg};
-}}
-QListWidget#results::item {{
+}
+QListWidget#results::item {
     padding: 8px 10px;
     border-radius: 8px;
     margin: 1px 4px;
-}}
-QListWidget#results::item:hover {{
+}
+QListWidget#results::item:hover {
     background: {hover};
-}}
-QListWidget#results::item:selected {{
+}
+QListWidget#results::item:selected {
     background: {selection};
-}}
+}
 """

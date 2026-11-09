@@ -14,7 +14,7 @@ from .models.launcher import Launcher
 from .models.result import ResultItem
 from .ui.theme import apply_theme
 from .ui.window import LaunchpadWindow
-from .workers.discovery_worker import DiscoveryWorker
+from .workers.discovery_workers import DiscoveryWorker
 from .workers.icon_pool import IconPool
 
 
